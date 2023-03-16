@@ -11,15 +11,16 @@ class UsersService {
             Users(
                 name = NAMES[index],
                 description = DESCRIPTION[index],
-                age = randomAge()
+                age = randomAge(),
+                avatar = AVATARS[index]
             )
 
         }.toMutableList()
     }
 
-    private fun randomAge(): String {
+    private fun randomAge(): Int {
         val random = ThreadLocalRandom.current().nextInt(20, 40)
-        return "Age: $random"
+        return random
     }
 
     companion object {
@@ -57,7 +58,23 @@ class UsersService {
             "Short-tempered cowboy",
             "Short-tempered gunslinger"
         )
-
+        private val AVATARS = mutableListOf(
+            R.drawable.johnny_bravo,
+            R.drawable.scooby_doo,
+            R.drawable.bugs_bunny,
+            R.drawable.mickey_mouse,
+            R.drawable.daffy_duck,
+            R.drawable.bart_simpson,
+            R.drawable.elmer_fudd,
+            R.drawable.tweety_bird,
+            R.drawable.garfield_cat,
+            R.drawable.sylvester_cat,
+            R.drawable.tom_cat,
+            R.drawable.jerry_mouse,
+            R.drawable.porky_pig,
+            R.drawable.speedy_gonzales,
+            R.drawable.yosemite_sam
+        )
     }
 
     fun getUsers(): List<Users> {

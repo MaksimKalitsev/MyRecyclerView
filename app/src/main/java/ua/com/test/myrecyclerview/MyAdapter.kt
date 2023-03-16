@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import ua.com.test.myrecyclerview.databinding.ItemRecyclerviewBinding
 
 class MyAdapter : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
@@ -30,7 +31,9 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
         with(holder.binding) {
             tvName.text = user.name
             tvDescription.text = user.description
-            tvAge.text = user.age
+            tvAge.text = tvAge.context.getString(R.string.age, user.age)
+           // user.age.toString()
+            ivFoto.load(user.avatar)
         }
     }
 

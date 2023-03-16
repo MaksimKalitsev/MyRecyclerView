@@ -23,7 +23,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="5dp">
+            android:padding="8dp">
 
             <ImageView
                 android:id="@+id/iv_foto"
@@ -32,7 +32,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src ="@drawable/ic_avatar" />
+                tools:src ="@tools:sample/avatars" />
 
             <TextView
                 android:id="@+id/tv_name"
@@ -41,6 +41,8 @@
                 android:layout_marginTop="5dp"
                 android:text="Name"
                 android:textStyle="bold"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 app:layout_constraintEnd_toStartOf="@+id/tv_age"
                 app:layout_constraintStart_toEndOf="@+id/iv_foto"
                 app:layout_constraintTop_toTopOf="@id/iv_foto" />
@@ -50,6 +52,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Description"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 app:layout_column="1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -62,7 +66,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="Age:"
+                android:text="@string/age"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
