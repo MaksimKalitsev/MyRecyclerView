@@ -30,6 +30,7 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
         with(holder.binding) {
             tvName.text = user.name
             tvDescription.text = user.description
+            tvAge.text = user.age
         }
     }
 

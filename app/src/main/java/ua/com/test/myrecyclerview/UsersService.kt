@@ -1,5 +1,7 @@
 package ua.com.test.myrecyclerview
 
+import java.util.concurrent.ThreadLocalRandom
+
 class UsersService {
     private var users = mutableListOf<Users>()
 
@@ -8,9 +10,16 @@ class UsersService {
             val index = if (it < NAMES.size) it else it % NAMES.size
             Users(
                 name = NAMES[index],
-                description = DESCRIPTION[index]
+                description = DESCRIPTION[index],
+                age = randomAge()
             )
+
         }.toMutableList()
+    }
+
+    private fun randomAge(): String {
+        val random = ThreadLocalRandom.current().nextInt(20, 40)
+        return "Age: $random"
     }
 
     companion object {
