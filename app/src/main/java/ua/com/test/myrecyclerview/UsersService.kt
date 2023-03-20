@@ -3,12 +3,12 @@ package ua.com.test.myrecyclerview
 import java.util.concurrent.ThreadLocalRandom
 
 class UsersService {
-    private var users = mutableListOf<Users>()
+    private var users = mutableListOf<User>()
 
     init {
         users = (0..100).map {
             val index = if (it < NAMES.size) it else it % NAMES.size
-            Users(
+            User(
                 name = NAMES[index],
                 description = DESCRIPTION[index],
                 age = randomAge(),
@@ -19,8 +19,7 @@ class UsersService {
     }
 
     private fun randomAge(): Int {
-        val random = ThreadLocalRandom.current().nextInt(20, 40)
-        return random
+        return ThreadLocalRandom.current().nextInt(20, 40)
     }
 
     companion object {
@@ -77,7 +76,23 @@ class UsersService {
         )
     }
 
-    fun getUsers(): List<Users> {
-        return users
+    fun getUsers(): List<User> {
+        return users.sortedBy { it.age }
+    }
+
+    fun getUsersWithHeaders(): List<ListItem> {
+        val sortedUsers = getUsers()
+        val usersWithHeaders = mutableListOf<ListItem>()
+        var currentAge = 0
+
+        sortedUsers.forEach { user ->
+            if (user.age != currentAge) {
+                currentAge = user.age
+                val header = Header("Age: $currentAge")
+                usersWithHeaders.add(header)
+            }
+            usersWithHeaders.add(user)
+        }
+        return usersWithHeaders
     }
 }

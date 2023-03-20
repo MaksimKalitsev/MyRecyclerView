@@ -20,6 +20,6 @@ class MainActivity : AppCompatActivity() {
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = adapter
-        adapter.users = usersService.getUsers()
+        adapter.items = usersService.getUsersWithHeaders()
     }
 }
