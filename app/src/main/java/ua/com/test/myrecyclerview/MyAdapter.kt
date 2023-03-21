@@ -2,46 +2,57 @@ package ua.com.test.myrecyclerview
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import ua.com.test.myrecyclerview.databinding.ItemHeaderBinding
 import ua.com.test.myrecyclerview.databinding.ItemRecyclerviewBinding
 
-class MyAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MyAdapter : RecyclerView.Adapter<MyAdapter.GeneralHolder>() {
 
     companion object {
         private const val VIEW_TYPE_HEADER = 0
         private const val VIEW_TYPE_USER = 1
     }
-    private var headerPositions: List<Int> = emptyList()
-    var items: List<Any> = emptyList()
+
+    var items: List<ListItem> = emptyList()
         @SuppressLint("NotifyDataSetChanged")
         set(newValue) {
             field = newValue
-            headerPositions = findHeaderPositions(newValue)
-            notifyDataSetChanged()
-        }
-    var users: List<User> = emptyList()
-        @SuppressLint("NotifyDataSetChanged")
-        set(newValue) {
-            field = newValue
-            items=newValue.plus(headerPositions)
             notifyDataSetChanged()
         }
 
-    class MyViewHolder(val binding: ItemRecyclerviewBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class MyViewHolder(private val binding: ItemRecyclerviewBinding) :
+        GeneralHolder(binding.root) {
+
+        override fun bind(item: ListItem) {
+            val user = item as User
+            with(binding) {
+                tvName.text = user.name
+                tvDescription.text = user.description
+                tvAge.text = tvAge.context.getString(R.string.age, user.age)
+                ivFoto.load(user.avatar)
+            }
+        }
     }
-    class HeaderViewHolder(val binding: ItemHeaderBinding):
-            RecyclerView.ViewHolder(binding.root)
 
+    class HeaderViewHolder(private val binding: ItemHeaderBinding) : GeneralHolder(binding.root) {
 
-//    abstract class KalitsevHolder(view: View): RecyclerView.ViewHolder(view) {
-//        abstract fun bind(item: ListItem)
-//    }
+        override fun bind(item: ListItem) {
+            val header = item as Header
+            with(binding) {
+                tvHeader.text = header.headerTitle
+            }
+        }
+    }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    abstract class GeneralHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+        abstract fun bind(item: ListItem)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GeneralHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             VIEW_TYPE_HEADER -> {
@@ -55,25 +66,9 @@ class MyAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: GeneralHolder, position: Int) {
         val item = items[position]
-        when (holder) {
-            is HeaderViewHolder -> {
-                val header = item as Header
-                with(holder.binding) {
-                    tvHeader.text = header.headerTitle
-                }
-            }
-            is MyViewHolder -> {
-                val user = item as User
-                with(holder.binding) {
-                    tvName.text = user.name
-                    tvDescription.text = user.description
-                    tvAge.text = tvAge.context.getString(R.string.age, user.age)
-                    ivFoto.load(user.avatar)
-                }
-            }
-        }
+        holder.bind(item)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -85,18 +80,6 @@ class MyAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return users.size+items.size
+        return items.size
     }
-    private fun findHeaderPositions(items: List<Any>): List<Int> {
-        val headerPositions = mutableListOf<Int>()
-        var currentPosition = -1
-        for ((index, item) in items.withIndex()) {
-            if (item is String) {
-                currentPosition = index
-                headerPositions.add(currentPosition)
-            }
-        }
-        return headerPositions
-    }
-
 }
