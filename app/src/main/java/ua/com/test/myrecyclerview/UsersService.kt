@@ -76,12 +76,14 @@ class UsersService {
         )
     }
 
-    fun getUsers(): List<User> {
+    private fun getUsers(): List<User> {
         return users.sortedBy { it.age }
     }
 
-    fun getUsersWithHeaders(): List<ListItem> {
-        val sortedUsers = getUsers()
+    fun getUsersWithHeaders(): List<ListItem> =
+        getUsersWithHeaders(getUsers())
+
+    private fun getUsersWithHeaders(sortedUsers: List<User>): List<ListItem> {
         val usersWithHeaders = mutableListOf<ListItem>()
         var currentAge = 0
 
@@ -94,5 +96,14 @@ class UsersService {
             usersWithHeaders.add(user)
         }
         return usersWithHeaders
+    }
+    fun fetchData():List<ListItem>{
+        val updatedList = mutableListOf<User>()
+        for ((index, item) in getUsers().withIndex()) {
+            if (index % 2 == 0) {
+                updatedList.add(item)
+            }
+        }
+        return getUsersWithHeaders(updatedList)
     }
 }
