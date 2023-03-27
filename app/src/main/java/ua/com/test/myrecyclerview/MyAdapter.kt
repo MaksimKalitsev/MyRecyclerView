@@ -1,9 +1,10 @@
 package ua.com.test.myrecyclerview
 
-import android.annotation.SuppressLint
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import ua.com.test.myrecyclerview.databinding.ItemHeaderBinding
@@ -17,10 +18,12 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.GeneralHolder>() {
     }
 
     var items: List<ListItem> = emptyList()
-        @SuppressLint("NotifyDataSetChanged")
+
         set(newValue) {
+            val diffCallback = UserDiffCallback(field, newValue)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
             field = newValue
-            notifyDataSetChanged()
+            diffResult.dispatchUpdatesTo(this)
         }
 
     class MyViewHolder(private val binding: ItemRecyclerviewBinding) :

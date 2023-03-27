@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: MyAdapter
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    private var ShowingFirstList = true
+    private var showingFirstList = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,13 +27,14 @@ class MainActivity : AppCompatActivity() {
 
         swipeRefreshLayout = binding.swipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener {
-            ShowingFirstList = !ShowingFirstList
+            showingFirstList = !showingFirstList
             adapter.items = getCurrentList()
             swipeRefreshLayout.isRefreshing = false
         }
+
     }
     private fun getCurrentList(): List<ListItem> {
-        return if (ShowingFirstList) {
+        return if (showingFirstList) {
             usersService.getUsersWithHeaders()
         } else {
             usersService.fetchData()
