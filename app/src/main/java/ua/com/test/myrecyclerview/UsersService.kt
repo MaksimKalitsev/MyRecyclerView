@@ -1,5 +1,6 @@
 package ua.com.test.myrecyclerview
 
+import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
 class UsersService {
@@ -97,7 +98,8 @@ class UsersService {
         }
         return usersWithHeaders
     }
-    fun fetchData():List<ListItem>{
+
+    fun fetchData(): List<ListItem> {
         val updatedList = mutableListOf<User>()
         for ((index, item) in getUsers().withIndex()) {
             if (index % 2 == 0) {
@@ -106,4 +108,16 @@ class UsersService {
         }
         return getUsersWithHeaders(updatedList)
     }
+
+    fun addRandomUser(): User {
+        val random = Random()
+        return User(
+            name = NAMES[random.nextInt(NAMES.size)],
+            description = DESCRIPTION[random.nextInt(DESCRIPTION.size)],
+            age = randomAge(),
+            avatar = AVATARS[random.nextInt(AVATARS.size)]
+        )
+    }
+
+
 }
