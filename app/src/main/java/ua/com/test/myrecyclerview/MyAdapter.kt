@@ -18,13 +18,19 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.GeneralHolder>() {
     }
 
     var items: List<ListItem> = emptyList()
-
         set(newValue) {
             val diffCallback = UserDiffCallback(field, newValue)
             val diffResult = DiffUtil.calculateDiff(diffCallback)
             field = newValue
             diffResult.dispatchUpdatesTo(this)
         }
+
+//    fun update(newItems: List<ListItem>) {
+//        val diffCallback = UserDiffCallback(items, newItems)
+//        val diffResult = DiffUtil.calculateDiff(diffCallback)
+//        items = newItems
+//        diffResult.dispatchUpdatesTo(this)
+//    }
 
     class MyViewHolder(private val binding: ItemRecyclerviewBinding) :
         GeneralHolder(binding.root) {

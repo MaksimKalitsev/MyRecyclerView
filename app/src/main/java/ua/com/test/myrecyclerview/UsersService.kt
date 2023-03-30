@@ -82,6 +82,7 @@ class UsersService {
     }
 
     fun getUsersWithHeaders(): List<ListItem> =
+  //      getUsers()
         getUsersWithHeaders(getUsers())
 
     private fun getUsersWithHeaders(sortedUsers: List<User>): List<ListItem> {
@@ -118,6 +119,5 @@ class UsersService {
             avatar = AVATARS[random.nextInt(AVATARS.size)]
         )
     }
-
 
 }

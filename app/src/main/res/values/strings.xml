@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">My RecyclerView</string>
     <string name="age">Age: %d</string>
+    <string name="model">Model:</string>
+    <string name="car_mileage">Mileage:</string>
+    <string name="car_color">Color:</string>
 
 </resources>

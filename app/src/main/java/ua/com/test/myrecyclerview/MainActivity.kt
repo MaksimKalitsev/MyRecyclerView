@@ -14,8 +14,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: MyAdapter
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private var showingFirstList = true
-    private lateinit var fab: FloatingActionButton
-    private val random = java.util.Random()
+    private lateinit var fabAdd: FloatingActionButton
+    private lateinit var fabDel: FloatingActionButton
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,16 +36,21 @@ class MainActivity : AppCompatActivity() {
             adapter.items = getCurrentList()
             swipeRefreshLayout.isRefreshing = false
         }
-        fab = binding.fab
-        fab.setOnClickListener {
+        fabAdd = binding.fabAddUser
+        fabAdd.setOnClickListener {
             val randomUser = usersService.addRandomUser()
             val currentItems = adapter.items.toMutableList()
-            val randomPosition = random.nextInt(currentItems.size + 1)
+            val randomPosition = Random.nextInt(currentItems.size)
             currentItems.add(randomPosition, randomUser)
             adapter.items = currentItems.toList()
-            adapter.notifyItemInserted(randomPosition)
         }
-
+        fabDel = binding.fabDeleteUser
+        fabDel.setOnClickListener {
+            val randomIndex = Random.nextInt(adapter.items.size)
+            val currentItems = adapter.items.toMutableList()
+            currentItems.removeAt(randomIndex)
+            adapter.items = currentItems.toList()
+        }
     }
 
     private fun getCurrentList(): List<ListItem> {
