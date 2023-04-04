@@ -4,5 +4,6 @@
     <string name="model">Model:</string>
     <string name="car_mileage">Mileage:</string>
     <string name="car_color">Color:</string>
+    <string name="car_header">Cars: %s</string>
 
 </resources>

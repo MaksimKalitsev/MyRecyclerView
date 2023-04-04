@@ -7,14 +7,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import ua.com.test.myrecyclerview.databinding.ItemCarsBinding
 import ua.com.test.myrecyclerview.databinding.ItemHeaderBinding
 import ua.com.test.myrecyclerview.databinding.ItemRecyclerviewBinding
 
 class MyAdapter : RecyclerView.Adapter<MyAdapter.GeneralHolder>() {
 
     companion object {
-        private const val VIEW_TYPE_HEADER = 0
+        private const val VIEW_TYPE_HEADER_USER = 0
         private const val VIEW_TYPE_USER = 1
+        private const val VIEW_TYPE_CAR = 2
     }
 
     var items: List<ListItem> = emptyList()
@@ -46,12 +48,26 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.GeneralHolder>() {
         }
     }
 
-    class HeaderViewHolder(private val binding: ItemHeaderBinding) : GeneralHolder(binding.root) {
+    class HeaderUserViewHolder(private val binding: ItemHeaderBinding) :
+        GeneralHolder(binding.root) {
 
         override fun bind(item: ListItem) {
-            val header = item as Header
+            val header = item as HeaderUser
             with(binding) {
                 tvHeader.text = header.headerTitle
+            }
+        }
+    }
+
+    class CarViewHolder(private val binding: ItemCarsBinding) : GeneralHolder(binding.root) {
+
+        override fun bind(item: ListItem) {
+            val car = item as Car
+            with(binding) {
+                tvBrandModel.text = car.model
+                tvCarMileage.text = car.age.toString()
+                tvColorCar.text = car.color
+                ivCars.load(car.image)
             }
         }
     }
@@ -64,16 +80,21 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.GeneralHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GeneralHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            VIEW_TYPE_HEADER -> {
+            VIEW_TYPE_HEADER_USER -> {
                 val binding = ItemHeaderBinding.inflate(inflater, parent, false)
-                HeaderViewHolder(binding)
+                HeaderUserViewHolder(binding)
             }
-            else -> {
+            VIEW_TYPE_USER -> {
                 val binding = ItemRecyclerviewBinding.inflate(inflater, parent, false)
                 MyViewHolder(binding)
             }
+            else -> {
+                val binding = ItemCarsBinding.inflate(inflater, parent, false)
+                CarViewHolder(binding)
+            }
         }
     }
+
 
     override fun onBindViewHolder(holder: GeneralHolder, position: Int) {
         val item = items[position]
@@ -81,10 +102,10 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.GeneralHolder>() {
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (items[position] is Header) {
-            VIEW_TYPE_HEADER
-        } else {
-            VIEW_TYPE_USER
+        return when (items[position]) {
+            is HeaderUser -> VIEW_TYPE_HEADER_USER
+            is User -> VIEW_TYPE_USER
+            else -> VIEW_TYPE_CAR
         }
     }
 

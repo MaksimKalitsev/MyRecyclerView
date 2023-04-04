@@ -6,12 +6,19 @@ interface ListItem {
     fun areItemTheSame(that: ListItem): Boolean
     fun areContentTheSame(that: ListItem): Boolean
 }
+
+interface Ageable {
+    val age: Int
+}
+
+interface PhysicalObject: ListItem, Ageable
+
 data class User(
     val name: String,
     val description: String,
-    val age: Int,
+    override val age: Int,
     @DrawableRes val avatar: Int
-) : ListItem {
+) : PhysicalObject {
     override fun areItemTheSame(that: ListItem): Boolean {
         return that is User && this.name == that.name
     }
@@ -25,13 +32,13 @@ data class User(
     }
 }
 
-data class Header(val headerTitle: String) : ListItem {
+data class HeaderUser(val headerTitle: String) : ListItem {
     override fun areItemTheSame(that: ListItem): Boolean {
-        return that is Header && this.headerTitle == that.headerTitle
+        return that is HeaderUser && this.headerTitle == that.headerTitle
     }
 
     override fun areContentTheSame(that: ListItem): Boolean {
-        return that is Header && this.headerTitle == that.headerTitle
+        return that is HeaderUser && this.headerTitle == that.headerTitle
     }
 }
 

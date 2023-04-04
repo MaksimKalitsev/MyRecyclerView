@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
     private var showingFirstList = true
     private lateinit var fabAdd: FloatingActionButton
     private lateinit var fabDel: FloatingActionButton
+    private lateinit var carsService: CarsService
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,10 +26,12 @@ class MainActivity : AppCompatActivity() {
 
         adapter = MyAdapter()
         usersService = UsersService()
+        carsService = CarsService()
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = adapter
-        adapter.items = usersService.getUsersWithHeaders()
+
+        adapter.items = getCurrentList()
 
         swipeRefreshLayout = binding.swipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener {
@@ -55,9 +58,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun getCurrentList(): List<ListItem> {
         return if (showingFirstList) {
-            usersService.getUsersWithHeaders()
+            val usersList = usersService.getUsers()
+            val carsList = carsService.getCars()
+            getSortedUsersAndCarsWithHeaders(usersList + carsList)
         } else {
-            usersService.fetchData()
+            fetchData(usersService.getUsers()+carsService.getCars())
         }
     }
 }

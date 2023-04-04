@@ -26,6 +26,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:clipToPadding="false"
+            android:paddingBottom="70dp"
             tools:itemCount="6"
             tools:listitem="@layout/item_recyclerview" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

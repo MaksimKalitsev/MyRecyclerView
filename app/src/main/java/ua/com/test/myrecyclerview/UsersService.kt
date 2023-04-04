@@ -77,38 +77,37 @@ class UsersService {
         )
     }
 
-    private fun getUsers(): List<User> {
+    fun getUsers(): List<User> {
         return users.sortedBy { it.age }
     }
+//
+//    fun getUsersWithHeaders(): List<ListItem> =
+//        getUsersWithHeaders(getUsers())
+//
+//    private fun getUsersWithHeaders(sortedUsers: List<User>): List<ListItem> {
+//        val usersWithHeaders = mutableListOf<ListItem>()
+//        var currentAge = 0
+//
+//        sortedUsers.forEach { user ->
+//            if (user.age != currentAge) {
+//                currentAge = user.age
+//                val header = HeaderUser("Age: $currentAge")
+//                usersWithHeaders.add(header)
+//            }
+//            usersWithHeaders.add(user)
+//        }
+//        return usersWithHeaders
+//    }
 
-    fun getUsersWithHeaders(): List<ListItem> =
-  //      getUsers()
-        getUsersWithHeaders(getUsers())
-
-    private fun getUsersWithHeaders(sortedUsers: List<User>): List<ListItem> {
-        val usersWithHeaders = mutableListOf<ListItem>()
-        var currentAge = 0
-
-        sortedUsers.forEach { user ->
-            if (user.age != currentAge) {
-                currentAge = user.age
-                val header = Header("Age: $currentAge")
-                usersWithHeaders.add(header)
-            }
-            usersWithHeaders.add(user)
-        }
-        return usersWithHeaders
-    }
-
-    fun fetchData(): List<ListItem> {
-        val updatedList = mutableListOf<User>()
-        for ((index, item) in getUsers().withIndex()) {
-            if (index % 2 == 0) {
-                updatedList.add(item)
-            }
-        }
-        return getUsersWithHeaders(updatedList)
-    }
+//    fun fetchData(): List<ListItem> {
+//        val updatedList = mutableListOf<PhysicalObject>()
+//        for ((index, item) in getUsers().withIndex()) {
+//            if (index % 2 == 0) {
+//                updatedList.add(item)
+//            }
+//        }
+//        return getSortedUsersAndCarsWithHeaders(updatedList)
+//    }
 
     fun addRandomUser(): User {
         val random = Random()
