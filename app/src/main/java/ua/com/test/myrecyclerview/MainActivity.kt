@@ -57,12 +57,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getCurrentList(): List<ListItem> {
-        return if (showingFirstList) {
-            val usersList = usersService.getUsers()
-            val carsList = carsService.getCars()
-            getSortedUsersAndCarsWithHeaders(usersList + carsList)
-        } else {
-            fetchData(usersService.getUsers()+carsService.getCars())
-        }
+        val rawObjects = (usersService.getUsers() + carsService.getCars()).sortByAge()
+
+        val objects =
+            if (showingFirstList) rawObjects
+            else fetchData(rawObjects)
+
+        return getSortedUsersAndCarsWithHeaders(objects)
     }
 }

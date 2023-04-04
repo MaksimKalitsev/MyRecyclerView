@@ -1,9 +1,11 @@
 package ua.com.test.myrecyclerview
 
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -27,13 +29,6 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.GeneralHolder>() {
             diffResult.dispatchUpdatesTo(this)
         }
 
-//    fun update(newItems: List<ListItem>) {
-//        val diffCallback = UserDiffCallback(items, newItems)
-//        val diffResult = DiffUtil.calculateDiff(diffCallback)
-//        items = newItems
-//        diffResult.dispatchUpdatesTo(this)
-//    }
-
     class MyViewHolder(private val binding: ItemRecyclerviewBinding) :
         GeneralHolder(binding.root) {
 
@@ -45,6 +40,11 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.GeneralHolder>() {
                 tvAge.text = tvAge.context.getString(R.string.age, user.age)
                 ivFoto.load(user.avatar)
             }
+        }
+        override fun onItemClicked(item: ListItem) {
+            val user = item as User
+            binding.tvDescription.text = user.description.uppercase()
+            binding.tvDescription.setTextColor(Color.RED)
         }
     }
 
@@ -65,16 +65,22 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.GeneralHolder>() {
             val car = item as Car
             with(binding) {
                 tvBrandModel.text = car.model
-                tvCarMileage.text = car.age.toString()
-                tvColorCar.text = car.color
+                tvCarMileage.text = tvCarMileage.context.getString(R.string.car_mileage, car.age)
+                tvColorCar.text = tvColorCar.context.getString(R.string.car_color, car.color)
                 ivCars.load(car.image)
             }
+        }
+        override fun onItemClicked(item: ListItem) {
+            val car = item as Car
+            binding.tvColorCar.text = car.color.uppercase()
+            binding.tvColorCar.setTextColor(Color.GREEN)
         }
     }
 
     abstract class GeneralHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         abstract fun bind(item: ListItem)
+        open fun onItemClicked(item: ListItem) {}
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GeneralHolder {
@@ -99,6 +105,10 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.GeneralHolder>() {
     override fun onBindViewHolder(holder: GeneralHolder, position: Int) {
         val item = items[position]
         holder.bind(item)
+
+        holder.itemView.setOnClickListener(View.OnClickListener {
+            holder.onItemClicked(item)
+        })
     }
 
     override fun getItemViewType(position: Int): Int {

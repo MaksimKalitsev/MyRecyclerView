@@ -11,7 +11,7 @@ interface Ageable {
     val age: Int
 }
 
-interface PhysicalObject: ListItem, Ageable
+interface PhysicalObject : ListItem, Ageable
 
 data class User(
     val name: String,

@@ -4,6 +4,7 @@ import java.util.concurrent.ThreadLocalRandom
 
 class CarsService {
     private var cars = mutableListOf<Car>()
+
     init {
         cars = (0..7).map {
             val index = if (it < MODELS.size) it else it % MODELS.size
@@ -16,11 +17,12 @@ class CarsService {
 
         }.toMutableList()
     }
+
     private fun randomMileage(): Int {
         return ThreadLocalRandom.current().nextInt(20, 40)
     }
 
-    companion object{
+    companion object {
         private val MODELS = mutableListOf(
             "Audi A6",
             "Audi RS",
@@ -53,7 +55,8 @@ class CarsService {
 
         )
     }
-     fun getCars():List<Car>{
-        return cars.sortedBy { it.age }
+
+    fun getCars(): List<Car> {
+        return cars
     }
 }
