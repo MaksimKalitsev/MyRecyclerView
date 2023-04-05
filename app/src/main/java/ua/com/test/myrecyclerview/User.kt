@@ -11,14 +11,18 @@ interface Ageable {
     val age: Int
 }
 
-interface PhysicalObject : ListItem, Ageable
+interface PhysicalObject : ListItem, Ageable {
+    var isSelected: Boolean
+}
 
 data class User(
     val name: String,
-    val description: String,
+    var description: String,
     override val age: Int,
     @DrawableRes val avatar: Int
 ) : PhysicalObject {
+
+    override var isSelected: Boolean = false
     override fun areItemTheSame(that: ListItem): Boolean {
         return that is User && this.name == that.name
     }

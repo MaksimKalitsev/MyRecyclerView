@@ -5,9 +5,12 @@ import androidx.annotation.DrawableRes
 data class Car(
     val model: String,
     override val age: Int,
-    val color: String,
+    var color: String,
     @DrawableRes val image: Int
 ) : PhysicalObject {
+
+    override var isSelected: Boolean = false
+
     override fun areItemTheSame(that: ListItem): Boolean {
         return that is Car && this.age == that.age
     }

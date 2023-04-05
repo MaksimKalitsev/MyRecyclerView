@@ -2,6 +2,7 @@ package ua.com.test.myrecyclerview
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -18,13 +19,25 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fabDel: FloatingActionButton
     private lateinit var carsService: CarsService
 
+    private val adapterCallback = object : MyAdapter.Callback {
+        override fun showToastInActivity(position: Int, itemType: String) {
+//            Toast.makeText(this@MainActivity, "$position - $itemType", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = MyAdapter()
+        adapter = MyAdapter(adapterCallback)
+        adapter.itemClickedLiveData.value = "234"
+        adapter.itemClickedLiveData.observe(this) {
+            it.takeUnless { it.isEmpty() }?.let {
+                Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show()
+            }
+        }
         usersService = UsersService()
         carsService = CarsService()
         val layoutManager = LinearLayoutManager(this)

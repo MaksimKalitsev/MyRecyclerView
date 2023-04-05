@@ -1,11 +1,15 @@
 package ua.com.test.myrecyclerview
 
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -13,12 +17,27 @@ import ua.com.test.myrecyclerview.databinding.ItemCarsBinding
 import ua.com.test.myrecyclerview.databinding.ItemHeaderBinding
 import ua.com.test.myrecyclerview.databinding.ItemRecyclerviewBinding
 
-class MyAdapter : RecyclerView.Adapter<MyAdapter.GeneralHolder>() {
+class MyAdapter(private val callback: Callback) : RecyclerView.Adapter<MyAdapter.GeneralHolder>() {
 
     companion object {
         private const val VIEW_TYPE_HEADER_USER = 0
         private const val VIEW_TYPE_USER = 1
         private const val VIEW_TYPE_CAR = 2
+    }
+
+    private val _itemClickedLiveData = MutableLiveData("")
+    val itemClickedLiveData: LiveData<String> = _itemClickedLiveData
+
+
+    interface Callback {
+        fun showToastInActivity(position: Int, itemType: String)
+    }
+
+    private val holderCallback = object : GeneralHolder.Callback {
+        override fun doSomething() {
+
+        }
+
     }
 
     var items: List<ListItem> = emptyList()
@@ -39,12 +58,15 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.GeneralHolder>() {
                 tvDescription.text = user.description
                 tvAge.text = tvAge.context.getString(R.string.age, user.age)
                 ivFoto.load(user.avatar)
+                val color = if (user.isSelected) Color.GREEN else Color.BLACK
+                tvDescription.setTextColor(color)
             }
         }
-        override fun onItemClicked(item: ListItem) {
+
+        override fun onItemClicked(item: ListItem): Boolean {
             val user = item as User
-            binding.tvDescription.text = user.description.uppercase()
-            binding.tvDescription.setTextColor(Color.RED)
+            user.isSelected = !user.isSelected
+            return true
         }
     }
 
@@ -68,19 +90,30 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.GeneralHolder>() {
                 tvCarMileage.text = tvCarMileage.context.getString(R.string.car_mileage, car.age)
                 tvColorCar.text = tvColorCar.context.getString(R.string.car_color, car.color)
                 ivCars.load(car.image)
+                val color = if (car.isSelected) Color.GREEN else Color.BLACK
+                tvColorCar.setTextColor(color)
             }
         }
-        override fun onItemClicked(item: ListItem) {
+
+        override fun onItemClicked(item: ListItem): Boolean {
             val car = item as Car
-            binding.tvColorCar.text = car.color.uppercase()
-            binding.tvColorCar.setTextColor(Color.GREEN)
+            car.isSelected = !car.isSelected
+            return true
         }
     }
 
     abstract class GeneralHolder(view: View) : RecyclerView.ViewHolder(view) {
 
+        interface Callback {
+            fun doSomething()
+        }
+
         abstract fun bind(item: ListItem)
-        open fun onItemClicked(item: ListItem) {}
+
+        /**
+         * @return true if notify item changed required
+         */
+        open fun onItemClicked(item: ListItem): Boolean = false
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GeneralHolder {
@@ -101,14 +134,20 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.GeneralHolder>() {
         }
     }
 
-
     override fun onBindViewHolder(holder: GeneralHolder, position: Int) {
         val item = items[position]
         holder.bind(item)
 
-        holder.itemView.setOnClickListener(View.OnClickListener {
-            holder.onItemClicked(item)
-        })
+        holder.itemView.setOnClickListener {
+//            callback.showToastInActivity(holder.adapterPosition, item.javaClass.simpleName)
+            _itemClickedLiveData.value = "${holder.adapterPosition} - ${item.javaClass.simpleName}"
+            val hasToBeNotified = holder.onItemClicked(item)
+            if (hasToBeNotified) {
+                val itemClickedPosition = holder.adapterPosition
+                notifyItemChanged(itemClickedPosition)
+            }
+
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
